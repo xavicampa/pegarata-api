@@ -72,7 +72,7 @@ jobs:
       - run: cd pegarata-manifests && git add . && git commit -m "Updating ${CIRCLE_BRANCH} Kustomize path with image tagged ${CIRCLE_BRANCH}-<< pipeline.number >>" && git push
       - discord/status
 
-  deploy-test:
+  deploy-dev:
     executor: docker/docker
     steps:
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
@@ -119,9 +119,6 @@ workflows:
   build-deploy:
     jobs:
       - build-test-and-publish-docker-image
-        #      - update_manifests:
-        #          requires:
-        #            - build-test-and-publish-docker-image
       - deploy-branch:
           requires:
             - build-test-and-publish-docker-image
@@ -129,7 +126,7 @@ workflows:
             branches:
               ignore:
                 - main
-      - deploy-test:
+      - deploy-dev:
           requires:
             - build-test-and-publish-docker-image
           filters:
