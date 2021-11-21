@@ -63,8 +63,8 @@ jobs:
       - run: git clone git@github.com:xavicampa/pegarata-manifests
       - rnikkei-kustomize/install
       #- run: cd pegarata-manifests/dev && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
-      - run: rm -rf pegarata-manifests/$CIRCLE_BRANCH && mkdir pegarata-manifests/$CIRCLE_BRANCH && cd pegarata-manifests/$CIRCLE_BRANCH && kustomize create --resources ../base
-      - run: cd pegarata-manifests/$CIRCLE_BRANCH && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_BRANCH-<< pipeline.number >>
+      - run: rm -rf pegarata-manifests/branches/$CIRCLE_BRANCH && mkdir pegarata-manifests/branches && mkdir pegarata-manifests/branches/$CIRCLE_BRANCH && cd pegarata-manifests/branches/$CIRCLE_BRANCH && kustomize create --resources ../../base
+      - run: cd pegarata-manifests/branches/$CIRCLE_BRANCH && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_BRANCH-<< pipeline.number >>
       - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
       - add_ssh_keys:
           fingerprints:
