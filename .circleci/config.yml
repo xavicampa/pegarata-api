@@ -135,15 +135,15 @@ workflows:
           filters:
             branches:
               only: main
-              #      - deploy-stage:
-              #          requires:
-              #            - deploy-dev
-              #          filters:
-              #            branches:
-              #              only: main
-              #      - deploy-prod:
-              #          requires:
-              #            - deploy-dev
-              #          filters:
-              #            branches:
-              #              only: main
+      - deploy-stage:
+          requires:
+            - deploy-dev
+          filters:
+            branches:
+              only: main
+      - deploy-prod:
+          requires:
+            - deploy-stage
+          filters:
+            branches:
+              only: main
