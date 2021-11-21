@@ -125,7 +125,7 @@ workflows:
       - deploy-branch:
           requires:
             - build-test-and-publish-docker-image
-          filter:
+          filters:
             branches:
               ignore:
                 - main
