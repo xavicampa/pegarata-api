@@ -21,7 +21,7 @@ jobs:
             path: api
 
       - run: mkdir test-results
-      - run: gotestsum --junitfile test-results/unit-tests.xml ./...      
+      - run: gotestsum --junitfile test-results/unit-tests.xml ./...
       - run: go test -race -coverprofile=test-results/coverage.txt -covermode=atomic ./...
       - codecov/upload:
           file: test-results/coverage.txt
@@ -39,13 +39,29 @@ jobs:
       - docker/update-description:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
       - discord/status
-  
-  update_manifests:
-    executor: docker/docker    
-    steps:      
+
+        #  update_manifests:
+        #    executor: docker/docker
+        #    steps:
+        #      - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+        #      - run: git clone git@github.com:xavicampa/pegarata-manifests
+        #      - rnikkei-kustomize/install
+        #      #- run: cd pegarata-manifests/dev && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
+        #      - run: rm -rf pegarata-manifests/$CIRCLE_BRANCH && mkdir pegarata-manifests/$CIRCLE_BRANCH && cd pegarata-manifests/$CIRCLE_BRANCH && kustomize create --resources ../base
+        #      - run: cd pegarata-manifests/$CIRCLE_BRANCH && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_BRANCH-<< pipeline.number >>
+        #      - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
+        #      - add_ssh_keys:
+        #          fingerprints:
+        #            - "0d:6c:c1:51:74:d3:1d:7b:42:3e:b3:d8:a0:97:3c:49"
+        #      - run: cd pegarata-manifests && git add . && git commit -m "Updating image to tag ${CIRCLE_SHA1}" && git push
+        #      - discord/status
+
+  deploy-branch:
+    executor: docker/docker
+    steps:
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: git clone git@github.com:xavicampa/pegarata-manifests
-      - rnikkei-kustomize/install      
+      - rnikkei-kustomize/install
       #- run: cd pegarata-manifests/dev && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
       - run: rm -rf pegarata-manifests/$CIRCLE_BRANCH && mkdir pegarata-manifests/$CIRCLE_BRANCH && cd pegarata-manifests/$CIRCLE_BRANCH && kustomize create --resources ../base
       - run: cd pegarata-manifests/$CIRCLE_BRANCH && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_BRANCH-<< pipeline.number >>
@@ -53,13 +69,81 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "0d:6c:c1:51:74:d3:1d:7b:42:3e:b3:d8:a0:97:3c:49"
-      - run: cd pegarata-manifests && git add . && git commit -m "Updating image to tag ${CIRCLE_SHA1}" && git push
+      - run: cd pegarata-manifests && git add . && git commit -m "Updating ${CIRCLE_BRANCH} Kustomize path with image tagged ${CIRCLE_BRANCH}-<< pipeline_number >>" && git push
+      - discord/status
+
+  deploy-test:
+    executor: docker/docker
+    steps:
+      - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - run: git clone git@github.com:xavicampa/pegarata-manifests
+      - rnikkei-kustomize/install
+      - run: cd pegarata-manifests/dev && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
+      - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
+      - add_ssh_keys:
+          fingerprints:
+            - "0d:6c:c1:51:74:d3:1d:7b:42:3e:b3:d8:a0:97:3c:49"
+      - run: cd pegarata-manifests && git add . && git commit -m "Updating *Dev* Kustomize path with image tagged ${CIRCLE_SHA1}" && git push
+      - discord/status
+
+  deploy-stage:
+    executor: docker/docker
+    steps:
+      - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - run: git clone git@github.com:xavicampa/pegarata-manifests
+      - rnikkei-kustomize/install
+      - run: cd pegarata-manifests/stage && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
+      - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
+      - add_ssh_keys:
+          fingerprints:
+            - "0d:6c:c1:51:74:d3:1d:7b:42:3e:b3:d8:a0:97:3c:49"
+      - run: cd pegarata-manifests && git add . && git commit -m "Updating *Stage* Kustomize path with image tagged ${CIRCLE_SHA1}" && git push
+      - discord/status
+
+  deploy-prod:
+    executor: docker/docker
+    steps:
+      - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - run: git clone git@github.com:xavicampa/pegarata-manifests
+      - rnikkei-kustomize/install
+      - run: cd pegarata-manifests/prod && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
+      - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
+      - add_ssh_keys:
+          fingerprints:
+            - "0d:6c:c1:51:74:d3:1d:7b:42:3e:b3:d8:a0:97:3c:49"
+      - run: cd pegarata-manifests && git add . && git commit -m "Updating *Prod* Kustomize path with image tagged ${CIRCLE_SHA1}" && git push
       - discord/status
 
 workflows:
-  build:-and-publish-docker-image:
+  version: 2
+  build-deploy:
     jobs:
       - build-test-and-publish-docker-image
-      - update_manifests:
+        #      - update_manifests:
+        #          requires:
+        #            - build-test-and-publish-docker-image
+      - deploy-branch:
           requires:
             - build-test-and-publish-docker-image
+          filter:
+            branches:
+              ignore:
+                - main
+      - deploy-test:
+          requires:
+            - build-test-and-publish-docker-image
+          filters:
+            branches:
+              only: main
+              #      - deploy-stage:
+              #          requires:
+              #            - deploy-dev
+              #          filters:
+              #            branches:
+              #              only: main
+              #      - deploy-prod:
+              #          requires:
+              #            - deploy-dev
+              #          filters:
+              #            branches:
+              #              only: main
