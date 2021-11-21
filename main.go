@@ -22,6 +22,7 @@ func main() {
 	memoryStore := new(myapi.MemoryItemStore)
 	memoryStore.CreateItem("this is a test")
 	memoryStore.CreateItem("and this is another test")
+	memoryStore.CreateItem("OMG and a third one!")
 
 	ItemAPIService := myapi.NewItemAPIService(memoryStore)
 	ItemAPIController := openapi.NewDefaultApiController(ItemAPIService)
