@@ -40,22 +40,6 @@ jobs:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
       - discord/status
 
-        #  update_manifests:
-        #    executor: docker/docker
-        #    steps:
-        #      - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-        #      - run: git clone git@github.com:xavicampa/pegarata-manifests
-        #      - rnikkei-kustomize/install
-        #      #- run: cd pegarata-manifests/dev && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
-        #      - run: rm -rf pegarata-manifests/$CIRCLE_BRANCH && mkdir pegarata-manifests/$CIRCLE_BRANCH && cd pegarata-manifests/$CIRCLE_BRANCH && kustomize create --resources ../base
-        #      - run: cd pegarata-manifests/$CIRCLE_BRANCH && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_BRANCH-<< pipeline.number >>
-        #      - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
-        #      - add_ssh_keys:
-        #          fingerprints:
-        #            - "0d:6c:c1:51:74:d3:1d:7b:42:3e:b3:d8:a0:97:3c:49"
-        #      - run: cd pegarata-manifests && git add . && git commit -m "Updating image to tag ${CIRCLE_SHA1}" && git push
-        #      - discord/status
-
   deploy-branch:
     executor: docker/docker
     steps:
@@ -78,7 +62,7 @@ jobs:
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: git clone git@github.com:xavicampa/pegarata-manifests
       - rnikkei-kustomize/install
-      - run: cd pegarata-manifests/dev && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
+      - run: cd pegarata-manifests/env/dev && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
       - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
       - add_ssh_keys:
           fingerprints:
@@ -92,7 +76,7 @@ jobs:
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: git clone git@github.com:xavicampa/pegarata-manifests
       - rnikkei-kustomize/install
-      - run: cd pegarata-manifests/stage && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
+      - run: cd pegarata-manifests/env/stage && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
       - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
       - add_ssh_keys:
           fingerprints:
@@ -106,7 +90,7 @@ jobs:
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: git clone git@github.com:xavicampa/pegarata-manifests
       - rnikkei-kustomize/install
-      - run: cd pegarata-manifests/prod && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
+      - run: cd pegarata-manifests/env/prod && kustomize edit set image xavicampa/pegarata-api=xavicampa/pegarata-api:$CIRCLE_SHA1
       - run: git config --global user.email javi+circleci@campalus.com && git config --global user.name xavicampa+circleci
       - add_ssh_keys:
           fingerprints:
