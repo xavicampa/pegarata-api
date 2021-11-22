@@ -20,10 +20,24 @@ func main() {
 	log.Printf("Server started")
 
 	memoryStore := new(myapi.MemoryItemStore)
-	memoryStore.CreateItem("this is a test")
-	memoryStore.CreateItem("and this is another test")
-	memoryStore.CreateItem("OMG and a third one!")
-	memoryStore.CreateItem("No way!")
+	memoryStore.CreateItem("Meat 🥩")
+	memoryStore.CreateItem("Apples 🍎")
+	memoryStore.CreateItem("Oranges 🍊")
+	memoryStore.CreateItem("Tomato sauce 🥫")
+
+	/*
+        { name: "Meat 🥩", done: false, onToggleItem: this.handleDone },
+        { name: "Apples 🍎", done: false, onToggleItem: this.handleDone },
+        { name: "Oranges 🍊", done: false, onToggleItem: this.handleDone },
+        { name: "Bananas 🍌", done: false, onToggleItem: this.handleDone },
+        { name: "Tomato sauce 🥫", done: false, onToggleItem: this.handleDone },
+        { name: "Potatos 🥔", done: false, onToggleItem: this.handleDone }
+      ],
+      doneItems: [
+        { name: "Milk 🥛", done: true, onToggleItem: this.handleTodo },
+        { name: "Eggs 🥚", done: true, onToggleItem: this.handleTodo }
+      ]
+	*/
 
 	ItemAPIService := myapi.NewItemAPIService(memoryStore)
 	ItemAPIController := openapi.NewDefaultApiController(ItemAPIService)

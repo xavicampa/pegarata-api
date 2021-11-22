@@ -20,7 +20,7 @@ func (is *MemoryItemStore) RetrieveItems() []openapi.PersistedItem {
 // CreateItem -
 func (is *MemoryItemStore) CreateItem(s string) string {
 	uuid := fmt.Sprint(uuid.New())
-	item := openapi.PersistedItem{Id: uuid, Name: s}
+	item := openapi.PersistedItem{Id: uuid, Name: s, Done: false}
 	var newItems []openapi.PersistedItem
 	if is.items == nil {
 		newItems = make([]openapi.PersistedItem, 1)
@@ -37,13 +37,25 @@ func (is *MemoryItemStore) CreateItem(s string) string {
 func (is *MemoryItemStore) DeleteItem(s string) bool {
 	for i := range is.items {
 		if is.items[i].Id == s {
-			if i == len(is.items)-1 {
-				is.items = is.items[:i]
-			} else if i == 0 {
-				is.items = is.items[i+1:]
-			} else {
-				is.items = append(is.items[:i], is.items[i+1:]...)
-			}
+			is.items[i].Done = true
+			//if i == len(is.items)-1 {
+			//	is.items = is.items[:i]
+			//} else if i == 0 {
+			//	is.items = is.items[i+1:]
+			//} else {
+			//	is.items = append(is.items[:i], is.items[i+1:]...)
+			//}
+			return true
+		}
+	}
+	return false
+}
+
+//	ToggleItem -
+func (is *MemoryItemStore) ToggleItem(s string) bool {
+	for i := range is.items {
+		if is.items[i].Id == s {
+			is.items[i].Done = !is.items[i].Done
 			return true
 		}
 	}

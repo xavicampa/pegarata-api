@@ -30,7 +30,7 @@ func (s *ItemAPIService) ItemsPost(item openapi.Item) (interface{}, error) {
 	//return nil, errors.New("service method 'PingGet' not implemented")
 	//result := openapi.HeartBeatResponse{Status: "OK", Message: "All good!"}
 	id := s.itemStore.CreateItem(item.Name)
-	result := openapi.PersistedItem{Id: id, Name: item.Name}
+	result := openapi.PersistedItem{Id: id, Name: item.Name, Done: item.Done}
 	return result, nil
 }
 
@@ -41,6 +41,19 @@ func (s *ItemAPIService) ItemsItemIdDelete(itemId string) (interface{}, error) {
 	//return nil, errors.New("service method 'ItemsItemIdDelete' not implemented")
 	deleted := s.itemStore.DeleteItem(itemId)
 	if deleted {
+		return nil, nil
+	} else {
+		return nil, errors.New("NotFound")
+	}
+}
+
+// ItemsItemIdDelete - Removes an item from the list
+func (s *ItemAPIService) ItemsItemIdPut(itemId string) (interface{}, error) {
+	// TODO - update ItemsItemIdDelete with the required logic for this service method.
+	// Add api_default_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+	//return nil, errors.New("service method 'ItemsItemIdDelete' not implemented")
+	toggled := s.itemStore.ToggleItem(itemId)
+	if toggled {
 		return nil, nil
 	} else {
 		return nil, errors.New("NotFound")

@@ -9,4 +9,5 @@ type ItemStore interface {
 	RetrieveItems() []openapi.PersistedItem
 	CreateItem(string) string
 	DeleteItem(string) bool
+	ToggleItem(string) bool
 }
