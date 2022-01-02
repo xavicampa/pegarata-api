@@ -24,25 +24,13 @@ func main() {
 	memoryStore.CreateItem("Apples 🍎")
 	memoryStore.CreateItem("Oranges 🍊")
 	memoryStore.CreateItem("Tomato sauce 🥫")
-	potatoes := memoryStore.CreateItem("Potatos 🥔")
-	bananas := memoryStore.CreateItem("Bananas 🍌")
+	memoryStore.CreateItem("Potatos 🥔")
+	memoryStore.CreateItem("Bananas 🍌")
+	milk := memoryStore.CreateItem("Milk 🥛")
+	eggs := memoryStore.CreateItem("Eggs 🥚")
 
-	memoryStore.ToggleItem(potatoes)
-	memoryStore.ToggleItem(bananas)
-
-	/*
-        { name: "Meat 🥩", done: false, onToggleItem: this.handleDone },
-        { name: "Apples 🍎", done: false, onToggleItem: this.handleDone },
-        { name: "Oranges 🍊", done: false, onToggleItem: this.handleDone },
-        { name: "Bananas 🍌", done: false, onToggleItem: this.handleDone },
-        { name: "Tomato sauce 🥫", done: false, onToggleItem: this.handleDone },
-        { name: "Potatos 🥔", done: false, onToggleItem: this.handleDone }
-      ],
-      doneItems: [
-        { name: "Milk 🥛", done: true, onToggleItem: this.handleTodo },
-        { name: "Eggs 🥚", done: true, onToggleItem: this.handleTodo }
-      ]
-	*/
+	memoryStore.ToggleItem(milk)
+	memoryStore.ToggleItem(eggs)
 
 	ItemAPIService := myapi.NewItemAPIService(memoryStore)
 	ItemAPIController := openapi.NewDefaultApiController(ItemAPIService)
