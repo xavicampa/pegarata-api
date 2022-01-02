@@ -24,6 +24,11 @@ func main() {
 	memoryStore.CreateItem("Apples 🍎")
 	memoryStore.CreateItem("Oranges 🍊")
 	memoryStore.CreateItem("Tomato sauce 🥫")
+	potatoes := memoryStore.CreateItem("Potatos 🥔")
+	bananas := memoryStore.CreateItem("Bananas 🍌")
+
+	memoryStore.ToggleItem(potatoes)
+	memoryStore.ToggleItem(bananas)
 
 	/*
         { name: "Meat 🥩", done: false, onToggleItem: this.handleDone },

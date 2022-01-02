@@ -6,6 +6,7 @@ RUN set -eux; \
 WORKDIR /
 COPY Makefile .
 COPY myapi.yaml .
+COPY api.json .
 RUN make openapi
 
 FROM golang:1.15 AS build
