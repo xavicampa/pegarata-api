@@ -70,7 +70,6 @@ paths:
           description: Deleted
         '404':
           description: Not Found
-
   /ping:
     get:
       summary: Heartbeat
