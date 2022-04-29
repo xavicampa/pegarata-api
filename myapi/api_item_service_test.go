@@ -28,6 +28,11 @@ func (is *MockItemStore) DeleteItem(s string) bool {
 	return args.Get(0).(bool)
 }
 
+func (is *MockItemStore) ToggleItem(s string) bool {
+	args := is.Called(s)
+	return args.Get(0).(bool)
+}
+
 func TestRetrieveItems(t *testing.T) {
 	mockedStore := new(MockItemStore)
 	mockedStore.On("RetrieveItems").Return([]openapi.PersistedItem{{Id: "1", Name: "test"}})
@@ -59,4 +64,15 @@ func TestDeleteItem(t *testing.T) {
 
 	mockedStore.AssertExpectations(t)
 	mockedStore.AssertCalled(t, "DeleteItem", "haha")
+}
+
+func TestToggleItem(t *testing.T) {
+	mockedStore := new(MockItemStore)
+	mockedStore.On("ToggleItem", "haha").Return(true)
+
+	myapi := &ItemAPIService{itemStore: mockedStore}
+	myapi.ItemsItemIdPut("haha")
+
+	mockedStore.AssertExpectations(t)
+	mockedStore.AssertCalled(t, "ToggleItem", "haha")
 }
